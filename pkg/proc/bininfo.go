@@ -1391,7 +1391,7 @@ func (bi *BinaryInfo) DwarfVersion() uint8 {
 	r := uint8(0)
 	for _, so := range bi.Images {
 		for _, cu := range so.compileUnits {
-			if cu.Version > r {
+			if cu.isgo && cu.Version > r {
 				r = cu.Version
 			}
 		}
@@ -2239,8 +2239,8 @@ func loadBinaryInfoGoRuntimeElf(bi *BinaryInfo, image *Image, path string, elfFi
 	// recover all panics.
 	defer func() {
 		ierr := recover()
-		logflags.Bug.Inc()
 		if ierr != nil {
+			logflags.Bug.Inc()
 			err = fmt.Errorf("error loading binary info from Go runtime: %v", ierr)
 		}
 	}()
@@ -2282,8 +2282,8 @@ func loadBinaryInfoGoRuntimeMacho(bi *BinaryInfo, image *Image, path string, exe
 	// recover all panics.
 	defer func() {
 		ierr := recover()
-		logflags.Bug.Inc()
 		if ierr != nil {
+			logflags.Bug.Inc()
 			err = fmt.Errorf("error loading binary info from Go runtime: %v", ierr)
 		}
 	}()
